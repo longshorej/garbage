@@ -8,6 +8,7 @@ fn handle_client(mut stream: UnixStream) {
     stream.read_to_string(&mut message).unwrap();
     println!("read message: {}", message);
     stream.write_all(&message.as_bytes()).unwrap();
+    stream.shutdown(std::net::Shutdown::Both).unwrap();
 }
 
 fn main() {
