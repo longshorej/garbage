@@ -1,0 +1,13 @@
+[package]
+name = "file-open-penalty"
+version = "0.1.0"
+authors = ["Jason Longshore <longshorej@gmail.com>"]
+
+[dependencies]
+
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "my_benchmark"
+harness = false
