@@ -6,7 +6,7 @@ Setup:
 
 Ensure that Alpakka PR has been published locally, and if necessary, the build.sbt version changed accordingly.
 
-Reproduce:
+Test:
 
 1) Start `eclipse-mosquitto` via Docker:
 
@@ -32,4 +32,4 @@ mosquitto_sub -v -h localhost -p 1883 -t '#'
 
 Observe:
 
-After restarting `socat`, notice that the client reconnects successfully and receives a ConnAck. However, its last PUBLISH is never resent.
+After restarting `socat`, notice that the client reconnects successfully and receives a ConnAck. Also note that the output from `mosquitto_sub` picks up from where it left off, indicating no messages were lost and publishes continue to work.

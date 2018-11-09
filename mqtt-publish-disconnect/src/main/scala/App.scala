@@ -6,8 +6,9 @@ import akka.stream.alpakka.mqtt.streaming.scaladsl.{ActorMqttClientSession, Mqtt
 import akka.stream.scaladsl.{Flow, Keep, MergeHub, RestartFlow, Sink, Source, Tcp}
 import akka.util.ByteString
 import java.util.UUID
+
 import scala.concurrent.duration._
-import scala.concurrent.{ExecutionContext, Promise}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.{Failure, Success}
 
 object App {
@@ -76,9 +77,7 @@ object App {
 
         val publish = Publish("test", ByteString(s"Testing #$count"))
 
-        val _ = Source
-          .single(Command(publish, promise))
-          .runWith(mqttSink)
+        mqttSession ! Command(publish, promise)
 
         promise.future
       }
