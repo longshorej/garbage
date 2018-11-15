@@ -11,5 +11,5 @@ lazy val server = project.in(file("server")).settings(
 )
 
 lazy val commonSettings = Seq(
-  libraryDependencies += "com.lightbend.akka" %% "akka-stream-alpakka-mqtt-streaming" % "1.0-M1+64-f2e0c1ca"
+  libraryDependencies += "com.lightbend.akka" %% "akka-stream-alpakka-mqtt-streaming" % "1.0-M1+64-6da7a7a4"
 )

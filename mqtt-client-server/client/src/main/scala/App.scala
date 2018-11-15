@@ -52,6 +52,13 @@ object App {
             event
         }
         .map {
+          case event @ Event(_: ConnAck, _) =>
+            Source
+              .single(Command[Promise[Unit]](Subscribe(s"test-$clientId")))
+              .runWith(mqttSink)
+
+            event
+
           case event @ Event(_: PubAck, Some(promise)) =>
             val _ = promise.success(())
 
@@ -71,8 +78,9 @@ object App {
 
       val publishTo = s"topic-${UUID.randomUUID()}"
 
+    
       Source
-        .tick(0.seconds, 2.milliseconds, 1L)
+        .tick(0.seconds, 5.milliseconds, 1L)
         .scan(0L)(_ + _)
         .mapAsync(1) { count =>
           val promise = Promise[Done]

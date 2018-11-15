@@ -74,6 +74,45 @@ object App {
               .offer(Command(ConnAck(ConnAckFlags.None, ConnAckReturnCode.ConnectionAccepted)))
               .map(_ => ())
 
+          case MqttEvent(Event(s: Subscribe, _), connection) if s.topicFilters.nonEmpty =>
+
+
+            connection
+              .offer(Command(SubAck(s.packetId, s.topicFilters.map(_._2))))
+              .map { _ =>
+                Source
+                  .tick(0.seconds, 5.milliseconds, 1L)
+                  .scan(0L)(_ + _)
+                  .mapAsync(1) { count =>
+                    val promise = Promise[Done]
+
+                    val command = Command(Publish(s.topicFilters.head._1, ByteString(s"Testing #$count")), promise)
+
+                    println(s"sending $command")
+
+                    mqttSession ! command
+
+                    promise.future
+                  }
+                  .runWith(Sink.ignore)
+                  .onComplete {
+                    case Success(_) =>
+                      System.exit(0)
+
+                    case Failure(t) =>
+                      t.printStackTrace()
+                      System.exit(1)
+                  }
+
+                ()
+
+              }
+
+          case MqttEvent(Event(_: PubAck, Some(promise)), _) =>
+            val _ = promise.success(())
+
+            Future.successful(())
+
           case MqttEvent(Event(p: Publish, _), connection) if p.packetId.isDefined =>
             val command = Command[Promise[Unit]](PubAck(p.packetId.get))
 

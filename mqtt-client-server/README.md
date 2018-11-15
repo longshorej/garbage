@@ -2,11 +2,11 @@
 
 ## Overview
 
-This highlights a bug when multiple clients are publishing at the same time.
+This highlights a bug when multiple clients and the server are publishing at the same time.
 
-There's a server program which `PUBACK`s any `PUBLISH`es it receives.
+There's a server program which `PUBACK`s any `PUBLISH`es it receives. When the server receives a `SUBSCRIBE`, it sends a `SUBACK` and starts publishing data to that topic.
 
-There's a client program which sends `PUBLISH`es to the server, waiting for `PUBACK`s before continuing.
+There's a client program which connects and subscribes to a random topic. It also sends `PUBLISH`es to the server, waiting for `PUBACK`s before continuing.
 
 ## Setup:
 
@@ -26,10 +26,8 @@ Ensure that Alpakka PR has been published locally, and if necessary, the build.s
 
 ## Observe:
 
-Executing step 5 will often cause both clients to fail to make progress, within 10 seconds or so.
-
-Sometimes one of the clients is able to pick off after some sort of timeout.
+Executing step 5 will quickly cause the system to stop making progress, within 10 seconds or so.
 
 ## Expectation:
 
-Both clients are able to publish and make progress simultaneously.
+Both clients and the server are able to publish and make progress simultaneously.
