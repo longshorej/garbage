@@ -32,20 +32,7 @@ class Pinger extends Actor with ActorLogging with Timers {
 }
 
 object App {
-  /**
-   * All classes that are loaded dynamically via
-   * reflection must be referenced here so that
-   * native-image can include them.
-   */
-  def link(): Unit = {
-    {
-      val _: akka.event.DefaultLoggingFilter = null
-    }
-  }
-
   def main(args: Array[String]): Unit = {
-    link()
-
     val system = StaticActorSystemImpl("pinger-system")
     val pingerA = system.actorOf(Props[Pinger], "pingerA")
     val pingerB = system.actorOf(Props[Pinger], "pingerB")
