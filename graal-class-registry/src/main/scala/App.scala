@@ -21,15 +21,18 @@ case class BooBaz(value: Long)
  * -> 0
  */
 object App {
+  {
+    // statically register everything (for notWorkingApproach)
+    Class.forName("FooBar")
+    Class.forName("BooBaz")
+  }
   def notWorkingApproach(fqcn: String): Option[Class[_]] = {
-    {
-      // statically register everything
-      Class.forName("FooBar")
-      Class.forName("BooBaz")
-    }
 
     println(s"looking up $fqcn")
+    // this works
+    println(Class.forName("FooBar"))
 
+    // this doesnt
     try {
       Some(Class.forName(fqcn))
     } catch {
