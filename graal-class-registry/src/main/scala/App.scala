@@ -8,6 +8,17 @@ case class BooBaz(value: Long)
  * $ native-image -jar target/scala-2.12/graal-class-registry-assembly-0.1.0-SNAPSHOT.jar
  *
  * $ CLASS_NAME=FooBar ./graal-class-registry-assembly-0.1.0-SNAPSHOT
+ *
+ * ~/work/garbage/graal-class-registry#master $ CLASS_NAME=FooBar ./graal-class-registry-assembly-0.1.0-SNAPSHOT
+ * workingApproach
+ * looking up FooBar
+ * Some(class FooBar)
+ *
+ *
+ * notWorkingApproach
+ * looking up FooBar
+ * None
+ * -> 0
  */
 object App {
   def notWorkingApproach(fqcn: String): Option[Class[_]] = {
